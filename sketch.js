@@ -1,48 +1,42 @@
-let imagePaths = [
-  "images/img2.jpg",
-  "images/img3.jpg",
-  "images/img4.jpg",
-  "images/img5.jpg",
-  "images/img6.jpg"
-];
+let imgPaths = [];
+let imgs = [];
+let selectedCount = 2;
 
-function setup() {
-  noCanvas();
-
-  // Attach dropdown to #controls
-  const controlsDiv = select('#controls');
-  const label = createElement('label', 'How many images?');
-  label.parent(controlsDiv);
-
-  const dropdown = createSelect();
-  dropdown.id("image-count");
-  dropdown.parent(controlsDiv);
-
-  for (let i = 2; i <= 5; i++) {
-    dropdown.option(i);
+function preload() {
+  for (let i = 1; i <= 10; i++) { // assume you have 10 images
+    imgPaths.push(`images/img${i}.jpg`);
   }
-
-  const button = createButton("Shuffle");
-  button.mousePressed(showImages);
-  button.parent(controlsDiv);
-
-  showImages(); // Initial call
 }
 
-function showImages() {
-  const count = parseInt(select("#image-count").value());
-  const container = select("#image-container");
-  container.html("");
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  noLoop(); // draw only when needed
+  loadImages();
 
-  // Fisher-Yates Shuffle
-  let shuffled = [...imagePaths];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
+  let selector = select('#imgCount');
+  selector.changed(() => {
+    selectedCount = int(selector.value());
+    shuffleAndDisplay();
+  });
 
-  for (let i = 0; i < count; i++) {
-    const img = createImg(shuffled[i]);
-    img.parent("image-container");
+  select('#shuffleBtn').mousePressed(() => {
+    shuffleAndDisplay();
+  });
+
+  shuffleAndDisplay(); // show once at start
+}
+
+function loadImages() {
+  imgs = imgPaths.map(path => loadImage(path));
+}
+
+function shuffleAndDisplay() {
+  clear();
+  background(255);
+  let shuffled = shuffle([...imgs]); // shuffle copy
+  let w = width / selectedCount;
+
+  for (let i = 0; i < selectedCount; i++) {
+    image(shuffled[i], i * w, 0, w, height);
   }
 }
