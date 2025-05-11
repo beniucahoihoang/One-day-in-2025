@@ -40,3 +40,14 @@ function shuffleAndDisplay() {
     image(shuffled[i], i * w, 0, w, height);
   }
 }
+function displayImages(images) {
+  const container = document.getElementById("image-container");
+  container.innerHTML = ""; // Clear previous
+
+  images.forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    container.appendChild(img);
+  });
+}
+
