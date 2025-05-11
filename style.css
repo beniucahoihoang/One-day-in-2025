@@ -1,18 +1,26 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+#controls {
+  margin-bottom: 15px;
+}
+
 #image-container {
   display: flex;
-  flex-direction: row; /* ensures left to right layout */
-  flex-wrap: wrap;     /* allows wrapping if screen too small */
-  gap: 10px;           /* space between images */
+  flex-direction: row;
+  flex-wrap: wrap;              /* Allow wrapping on small screens */
+  gap: 12px;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: 10px;
 }
 
 #image-container img {
-  max-width: 100%;     /* responsive inside container */
-  height: auto;        /* preserve aspect ratio */
-  max-height: 300px;   /* optional: control max height */
-  object-fit: contain; /* avoid distortion */
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  max-height: 250px;            /* Set height limit */
+  height: auto;
+  width: auto;
+  object-fit: contain;          /* Prevent distortion */
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
