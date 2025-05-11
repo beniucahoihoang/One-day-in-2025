@@ -7,11 +7,16 @@ let imagePaths = [
 ];
 
 function setup() {
-  noCanvas(); // We don’t use p5 canvas for this layout
+  noCanvas();
+
+  // Attach dropdown to #controls
+  const controlsDiv = select('#controls');
+  const label = createElement('label', 'How many images?');
+  label.parent(controlsDiv);
 
   const dropdown = createSelect();
   dropdown.id("image-count");
-  dropdown.parent("controls");
+  dropdown.parent(controlsDiv);
 
   for (let i = 2; i <= 5; i++) {
     dropdown.option(i);
@@ -19,26 +24,25 @@ function setup() {
 
   const button = createButton("Shuffle");
   button.mousePressed(showImages);
-  button.parent("controls");
+  button.parent(controlsDiv);
 
-  showImages(); // Load initial images
+  showImages(); // Initial call
 }
 
 function showImages() {
   const count = parseInt(select("#image-count").value());
   const container = select("#image-container");
-  container.html(""); // Clear previous
+  container.html("");
 
-  // Shuffle images using Fisher-Yates
+  // Fisher-Yates Shuffle
   let shuffled = [...imagePaths];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
-  // Display selected number of images
   for (let i = 0; i < count; i++) {
-    const imgElement = createImg(shuffled[i]);
-    imgElement.parent("image-container");
+    const img = createImg(shuffled[i]);
+    img.parent("image-container");
   }
 }
