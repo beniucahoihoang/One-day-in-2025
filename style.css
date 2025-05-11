@@ -1,16 +1,18 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #f0f0f0;
+#image-container {
+  display: flex;
+  flex-direction: row; /* ensures left to right layout */
+  flex-wrap: wrap;     /* allows wrapping if screen too small */
+  gap: 10px;           /* space between images */
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 10px;
 }
 
-main {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: white;
-  padding: 10px 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  z-index: 100;
+#image-container img {
+  max-width: 100%;     /* responsive inside container */
+  height: auto;        /* preserve aspect ratio */
+  max-height: 300px;   /* optional: control max height */
+  object-fit: contain; /* avoid distortion */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
