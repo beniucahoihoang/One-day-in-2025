@@ -10,17 +10,17 @@ body {
 #image-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;              /* Allow wrapping on small screens */
+  flex-wrap: wrap;
   gap: 12px;
   justify-content: flex-start;
   align-items: flex-start;
 }
 
 #image-container img {
-  max-height: 250px;            /* Set height limit */
+  max-height: 250px;
   height: auto;
   width: auto;
-  object-fit: contain;          /* Prevent distortion */
+  object-fit: contain;
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
