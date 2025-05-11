@@ -1,16 +1,42 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #f0f0f0;
+let imgPaths = [];
+let imgs = [];
+let selectedCount = 2;
+
+function preload() {
+  for (let i = 1; i <= 10; i++) { // assume you have 10 images
+    imgPaths.push(`images/img${i}.jpg`);
+  }
 }
 
-main {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: white;
-  padding: 10px 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  z-index: 100;
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  noLoop(); // draw only when needed
+  loadImages();
+
+  let selector = select('#imgCount');
+  selector.changed(() => {
+    selectedCount = int(selector.value());
+    shuffleAndDisplay();
+  });
+
+  select('#shuffleBtn').mousePressed(() => {
+    shuffleAndDisplay();
+  });
+
+  shuffleAndDisplay(); // show once at start
+}
+
+function loadImages() {
+  imgs = imgPaths.map(path => loadImage(path));
+}
+
+function shuffleAndDisplay() {
+  clear();
+  background(255);
+  let shuffled = shuffle([...imgs]); // shuffle copy
+  let w = width / selectedCount;
+
+  for (let i = 0; i < selectedCount; i++) {
+    image(shuffled[i], i * w, 0, w, height);
+  }
 }
