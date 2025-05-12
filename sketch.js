@@ -33,12 +33,17 @@ function shuffleAndDisplay() {
 
   for (let i = 0; i < selectedCount; i++) {
     let img = shuffled[i];
+
+    // Get a resized copy with correct aspect ratio
     let aspect = img.width / img.height;
     let h = w / aspect;
 
-    // Vertically center the image if it's not full height
-    let y = (height - h) / 2;
+    // If image size is invalid (zero), fallback to square
+    if (!aspect || !isFinite(aspect)) {
+      h = width / selectedCount;
+    }
 
+    let y = (height - h) / 2;
     image(img, i * w, y, w, h);
   }
 }
