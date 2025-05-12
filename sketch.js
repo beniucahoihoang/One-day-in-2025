@@ -12,18 +12,12 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  noLoop();
+  dropdown = createSelect();
+  // ... other UI setup ...
+  dropdown.changed(shuffleAndDisplay);
+  button.mousePressed(shuffleAndDisplay);
 
-  let selector = select('#imgCount');
-  selector.changed(() => {
-    selectedCount = int(selector.value());
-    shuffleAndDisplay();
-  });
-
-  select('#shuffleBtn').mousePressed(() => {
-    shuffleAndDisplay();
-  });
-
+  // Initial draw only after setup is done
   shuffleAndDisplay();
 }
 
