@@ -27,10 +27,18 @@ function setup() {
 function shuffleAndDisplay() {
   clear();
   background(255);
-
-  let shuffled = shuffle([...imgs]); // shuffle a copy
+  
+  let shuffled = shuffle([...imgs]);
   let w = width / selectedCount;
+
   for (let i = 0; i < selectedCount; i++) {
-    image(shuffled[i], i * w, 0, w, height);
+    let img = shuffled[i];
+    let aspect = img.width / img.height;
+    let h = w / aspect;
+
+    // Vertically center the image if it's not full height
+    let y = (height - h) / 2;
+
+    image(img, i * w, y, w, h);
   }
 }
