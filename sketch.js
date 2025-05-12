@@ -9,8 +9,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  noLoop(); // draw only when needed
-  loadImages();
+  noLoop();
 
   let selector = select('#imgCount');
   selector.changed(() => {
@@ -22,19 +21,15 @@ function setup() {
     shuffleAndDisplay();
   });
 
-  shuffleAndDisplay(); // show once at start
-}
-
-function loadImages() {
-  imgs = imgPaths.map(path => loadImage(path));
+  shuffleAndDisplay();
 }
 
 function shuffleAndDisplay() {
   clear();
   background(255);
-  let shuffled = shuffle([...imgs]); // shuffle copy
-  let w = width / selectedCount;
 
+  let shuffled = shuffle([...imgs]); // shuffle a copy
+  let w = width / selectedCount;
   for (let i = 0; i < selectedCount; i++) {
     image(shuffled[i], i * w, 0, w, height);
   }
