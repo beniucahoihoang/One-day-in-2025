@@ -3,14 +3,15 @@ let imgs = [];
 let selectedCount = 2;
 
 function preload() {
-  for (let i = 1; i <= 20; i++) { // assume you have 10 images
+  // Assuming you have 50 images
+  for (let i = 1; i <= 50; i++) { // Update the range for 50 images
     imgPaths.push(`images/img${i}.jpg`);
   }
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  noLoop(); // draw only when needed
+  noLoop(); // Only draw when needed
   loadImages();
 
   let selector = select('#imgCount');
@@ -23,20 +24,27 @@ function setup() {
     shuffleAndDisplay();
   });
 
-  shuffleAndDisplay(); // show once at start
+  shuffleAndDisplay(); // Show once at start
 }
 
 function loadImages() {
-  imgs = imgPaths.map(path => loadImage(path));
+  imgs = imgPaths.map(path => loadImage(path)); // Preload all the images
 }
 
 function shuffleAndDisplay() {
   clear();
   background(255);
-  let shuffled = shuffle([...imgs]); // shuffle copy
+
+  // Shuffle the images array to ensure randomness
+  let shuffled = shuffle([...imgs]); // shuffle a copy to avoid modifying the original array
+
+  // Slice the shuffled array to get the number of images we want to display
+  let selectedImages = shuffled.slice(0, selectedCount);
+
   let w = width / selectedCount;
 
+  // Display the selected images
   for (let i = 0; i < selectedCount; i++) {
-    image(shuffled[i], i * w, 0, w, height);
+    image(selectedImages[i], i * w, 0, w, height);
   }
 }
