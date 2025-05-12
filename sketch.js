@@ -1,10 +1,9 @@
-let imgPaths = [];
 let imgs = [];
 let selectedCount = 2;
 
 function preload() {
-  for (let i = 1; i <= 10; i++) { // assume you have 10 images
-    imgPaths.push(`images/img${i}.jpg`);
+  for (let i = 1; i <= 10; i++) {
+    imgs.push(loadImage(`images/img${i}.jpg`));
   }
 }
 
