@@ -2,8 +2,11 @@ let imgs = [];
 let selectedCount = 2;
 
 function preload() {
-  for (let i = 1; i <= 10; i++) {
-    imgs.push(loadImage(`images/img${i}.jpg`));
+  for (let path of imagePaths) {
+    let img = loadImage(path, (img) => {
+      img.resize(200, 0); // Set a consistent width, auto height
+    });
+    imgs.push(img);
   }
 }
 
