@@ -1,17 +1,19 @@
 let imgPaths = [];
 let imgs = [];
 let selectedCount = 2;
+let canvas;
 
 function preload() {
-  // Assuming you have 50 images
-  for (let i = 1; i <= 50; i++) { // Update the range for 50 images
+  for (let i = 1; i <= 50; i++) {
     imgPaths.push(`images/img${i}.jpg`);
   }
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  noLoop(); // Only draw when needed
+  canvas = createCanvas(0, 0);
+  canvas.parent('canvasContainer');
+  noLoop();
+
   loadImages();
 
   let selector = select('#imgCount');
@@ -23,28 +25,41 @@ function setup() {
   select('#shuffleBtn').mousePressed(() => {
     shuffleAndDisplay();
   });
-
-  shuffleAndDisplay(); // Show once at start
 }
 
 function loadImages() {
-  imgs = imgPaths.map(path => loadImage(path)); // Preload all the images
+  imgs = [];
+  let loaded = 0;
+
+  for (let i = 0; i < imgPaths.length; i++) {
+    loadImage(imgPaths[i], img => {
+      imgs[i] = img;
+      loaded++;
+      if (loaded === imgPaths.length) {
+        shuffleAndDisplay();
+      }
+    }, err => {
+      console.error(`Failed to load image: ${imgPaths[i]}`, err);
+    });
+  }
 }
 
 function shuffleAndDisplay() {
+  const containerHeight = window.innerHeight - 60; // height minus controls
+  const imgHeight = containerHeight;
+  const imgWidth = imgHeight * (4 / 3); // 4:3 aspect ratio
+  const totalWidth = imgWidth * selectedCount;
+
+  resizeCanvas(totalWidth, imgHeight);
   clear();
   background(255);
 
-  // Shuffle the images array to ensure randomness
-  let shuffled = shuffle([...imgs]); // shuffle a copy to avoid modifying the original array
+  const shuffled = shuffle([...imgs]);
+  const selectedImages = shuffled.slice(0, selectedCount);
 
-  // Slice the shuffled array to get the number of images we want to display
-  let selectedImages = shuffled.slice(0, selectedCount);
-
-  let w = width / selectedCount;
-
-  // Display the selected images
   for (let i = 0; i < selectedCount; i++) {
-    image(selectedImages[i], i * w, 0, w, height);
+    image(selectedImages[i], i * imgWidth, 0, imgWidth, imgHeight);
   }
+
+  document.getElementById('canvasContainer').scrollLeft = 0;
 }
