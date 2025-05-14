@@ -1,65 +1,62 @@
-let imgPaths = [];
-let imgs = [];
-let selectedCount = 2;
-let canvas;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Shuffle Gallery</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* Prevent double scrolling */
+      font-family: sans-serif;
+    }
 
-function preload() {
-  for (let i = 1; i <= 50; i++) {
-    imgPaths.push(`images/img${i}.jpg`);
-  }
-}
+    main {
+      padding: 10px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 60px;
+    }
 
-function setup() {
-  canvas = createCanvas(0, 0);
-  canvas.parent('canvasContainer');
-  noLoop();
+    label, select, button {
+      font-size: 1rem;
+    }
 
-  loadImages();
+    #canvasContainer {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      width: 100vw;
+      overflow-x: auto;
+      overflow-y: hidden;
+      white-space: nowrap;
+      background: white;
+    }
 
-  let selector = select('#imgCount');
-  selector.changed(() => {
-    selectedCount = int(selector.value());
-    shuffleAndDisplay();
-  });
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <label for="imgCount">How many images?</label>
+    <select id="imgCount">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+    </select>
+    <button id="shuffleBtn">Shuffle</button>
+  </main>
 
-  select('#shuffleBtn').mousePressed(() => {
-    shuffleAndDisplay();
-  });
-}
+  <div id="canvasContainer"></div>
 
-function loadImages() {
-  imgs = [];
-  let loaded = 0;
-
-  for (let i = 0; i < imgPaths.length; i++) {
-    loadImage(imgPaths[i], img => {
-      imgs[i] = img;
-      loaded++;
-      if (loaded === imgPaths.length) {
-        shuffleAndDisplay();
-      }
-    }, err => {
-      console.error(`Failed to load image: ${imgPaths[i]}`, err);
-    });
-  }
-}
-
-function shuffleAndDisplay() {
-  const containerHeight = window.innerHeight - 60; // height minus controls
-  const imgHeight = containerHeight;
-  const imgWidth = imgHeight * (4 / 3); // 4:3 aspect ratio
-  const totalWidth = imgWidth * selectedCount;
-
-  resizeCanvas(totalWidth, imgHeight);
-  clear();
-  background(255);
-
-  const shuffled = shuffle([...imgs]);
-  const selectedImages = shuffled.slice(0, selectedCount);
-
-  for (let i = 0; i < selectedCount; i++) {
-    image(selectedImages[i], i * imgWidth, 0, imgWidth, imgHeight);
-  }
-
-  document.getElementById('canvasContainer').scrollLeft = 0;
-}
+  <script src="sketch.js"></script>
+</body>
+</html>
