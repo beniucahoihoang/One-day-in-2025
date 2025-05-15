@@ -4,7 +4,7 @@ let selectedCount = 2;
 let canvas;
 
 function preload() {
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 100; i++) {
     imgPaths.push(`images/img${i}.jpg`);
   }
 }
