@@ -5,7 +5,7 @@ let canvas;
 let allImagesLoaded = false;
 
 function preload() {
-  // Adjust to match the number of actual images you have!
+  // Thay đổi dựa theo số lượng hình ảnh Ben đang có
   for (let i = 1; i <= 56; i++) {
     imgPaths.push(`images/img${i}.jpg`);
   }
@@ -86,7 +86,7 @@ function shuffleAndDisplay() {
 
   const shuffled = shuffle([...imgs]).slice(0, selectedCount);
 
-  // Calculate dynamic width based on aspect ratios
+  // Tính toán chiều rộng dựa trên tỷ lệ khung hình
   let totalWidth = 0;
   const scaledWidths = [];
 
