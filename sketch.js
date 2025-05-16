@@ -2,9 +2,11 @@ let imgPaths = [];
 let imgs = [];
 let selectedCount = 2;
 let canvas;
+let allImagesLoaded = false;
 
 function preload() {
-  for (let i = 1; i <= 100; i++) {
+  // Adjust to match the number of actual images you have!
+  for (let i = 1; i <= 30; i++) {
     imgPaths.push(`images/img${i}.jpg`);
   }
 }
@@ -14,51 +16,100 @@ function setup() {
   canvas.parent('canvasContainer');
   noLoop();
 
+  console.log("Loading images...");
   loadImages();
 
   let selector = select('#imgCount');
   selector.changed(() => {
     selectedCount = int(selector.value());
-    shuffleAndDisplay();
+    if (allImagesLoaded) {
+      shuffleAndDisplay();
+    }
   });
 
   select('#shuffleBtn').mousePressed(() => {
-    shuffleAndDisplay();
+    if (allImagesLoaded) {
+      shuffleAndDisplay();
+    } else {
+      console.warn("Images are still loading...");
+    }
   });
 }
 
 function loadImages() {
   imgs = [];
+  let attempted = 0;
   let loaded = 0;
+  const total = imgPaths.length;
 
-  for (let i = 0; i < imgPaths.length; i++) {
-    loadImage(imgPaths[i], img => {
-      imgs[i] = img;
-      loaded++;
-      if (loaded === imgPaths.length) {
-        shuffleAndDisplay();
+  for (let i = 0; i < total; i++) {
+    loadImage(imgPaths[i],
+      img => {
+        imgs.push(img);
+        loaded++;
+        attempted++;
+        console.log(`✅ Loaded: ${imgPaths[i]}`);
+        checkDone();
+      },
+      err => {
+        console.warn(`❌ Failed: ${imgPaths[i]}`);
+        attempted++;
+        checkDone();
       }
-    }, err => {
-      console.error(`Failed to load image: ${imgPaths[i]}`, err);
-    });
+    );
+  }
+
+  function checkDone() {
+    if (attempted === total) {
+      allImagesLoaded = true;
+      console.log(`Finished loading ${loaded} / ${total} images.`);
+      if (loaded > 0) {
+        shuffleAndDisplay();
+      } else {
+        background(255, 0, 0);
+        fill(0);
+        textSize(24);
+        text("No images loaded.", 10, 40);
+      }
+    }
   }
 }
 
 function shuffleAndDisplay() {
-  const containerHeight = window.innerHeight - 60; // height minus controls
-  const imgHeight = containerHeight;
-  const imgWidth = imgHeight * (4 / 3); // 4:3 aspect ratio
-  const totalWidth = imgWidth * selectedCount;
+  if (!allImagesLoaded) {
+    console.warn("Images not ready yet.");
+    return;
+  }
 
+  const containerHeight = window.innerHeight - 60;
+  const imgHeight = containerHeight;
+
+  const shuffled = shuffle([...imgs]).slice(0, selectedCount);
+
+  // Calculate dynamic width based on aspect ratios
+  let totalWidth = 0;
+  const scaledWidths = [];
+
+  for (let i = 0; i < shuffled.length; i++) {
+    const img = shuffled[i];
+    const aspectRatio = img.width / img.height;
+    const scaledWidth = imgHeight * aspectRatio;
+    scaledWidths.push(scaledWidth);
+    totalWidth += scaledWidth;
+  }
+
+  // Resize canvas
   resizeCanvas(totalWidth, imgHeight);
   clear();
   background(255);
 
-  const shuffled = shuffle([...imgs]);
-  const selectedImages = shuffled.slice(0, selectedCount);
-
-  for (let i = 0; i < selectedCount; i++) {
-    image(selectedImages[i], i * imgWidth, 0, imgWidth, imgHeight);
+  // Draw images
+  let x = 0;
+  for (let i = 0; i < shuffled.length; i++) {
+    const img = shuffled[i];
+    const w = scaledWidths[i];
+    image(img, x, 0, w, imgHeight);
+    x += w;
   }
 
   document.getElementById('canvasContainer').scrollLeft = 0;
