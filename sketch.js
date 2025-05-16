@@ -6,7 +6,7 @@ let allImagesLoaded = false;
 
 function preload() {
   // Adjust to match the number of actual images you have!
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 56; i++) {
     imgPaths.push(`images/img${i}.jpg`);
   }
 }
